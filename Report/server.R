@@ -693,11 +693,19 @@ server <- function(input, output, session) {
   getPrevalenceTable <- shiny::reactive({
     res <- getPrevalenceData()
     res |>
+      dplyr::mutate(estimate_value = dplyr::if_else(
+        grepl("prevalence", estimate_name),
+        as.character(10000 * as.numeric(estimate_value)),
+        estimate_value
+      )) |>
       IncidencePrevalence::tablePrevalence(
         header = input$prevalence_table_header,
         groupColumn = input$prevalence_table_group_column,
         hide = input$prevalence_table_hide,
         settingsColumn = omopgenerics::settingsColumns(res)
+      ) |>
+      gt::tab_header(
+        title = "Prevalence is expressed per 10,000 individuals"
       )
   })
   output$prevalence_table <- gt::render_gt({
