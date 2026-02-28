@@ -1,0 +1,496 @@
+---
+title: "Breast Cancer Under 50 Figures "
+format: docx
+fig-width: 6.5
+fig-height: 6.5
+
+execute:
+  echo: false               # Hide all code in output
+  warning: false            # Suppress warnings in output
+  message: false            # Suppress messages (e.g., package startup messages)
+  error: false              # Suppress error messages in output (errors will still halt render)
+editor: visual
+---
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(CodelistGenerator)
+library(CohortCharacteristics)
+library(DiagrammeR)
+library(dplyr)
+library(DT)
+library(ggplot2)
+library(glue)
+library(gt)
+library(IncidencePrevalence)
+library(markdown)
+library(omopgenerics)
+library(OmopSketch)
+library(purrr)
+library(readr)
+library(rlang)
+library(shiny)
+library(shinyWidgets)
+library(sortable)
+library(tidyr)
+library(visOmopResults)
+library(yaml)
+library(stringr)
+library(here)
+library(scales)
+library(CohortSurvival)
+
+fileData <- file.path(getwd(), "rawData")
+
+data <- importSummarisedResult(fileData)
+
+survival <- data |> filterSettings(package_name == "CohortSurvival")
+incPrev <- data |> filterSettings(package_name == "IncidencePrevalence")
+cc <- data |> filterSettings(package_name == "CohortCharacteristics")
+
+themeOpioid <- function(){
+  themeVisOmop() +
+    themeVisOmop(fontsizeRef = 8)+
+    theme(legend.position = "top", 
+          legend.title = element_blank(), 
+#          panel.spacing = unit(0.1, "lines"),      
+          legend.margin = margin(t = 0, b = 0),  
+#          plot.margin = margin(t = 10, b = 10),
+          strip.background = element_rect(fill = "#f1eef6")) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1,    
+                                   vjust = 0.5)) +
+    theme(strip.text.y.right = element_text(angle = 90))
+}
+
+themeSurvival <- function(){
+  themeVisOmop() +
+    themeVisOmop(fontsizeRef = 8)+
+    theme(legend.position = "right", 
+          legend.title = element_blank(), 
+#          panel.spacing = unit(0.1, "lines"),      
+          legend.margin = margin(t = 0, b = 0),  
+#          plot.margin = margin(t = 10, b = 10),
+          strip.background = element_rect(fill = "#f1eef6"))
+}
+
+themeOpioidCount <- function(){
+  themeVisOmop() +
+    themeVisOmop(fontsizeRef = 10)+
+    theme(legend.position = "top", 
+          legend.title = element_blank(), 
+#          panel.spacing = unit(0.1, "lines"),      
+          legend.margin = margin(t = 0, b = 0),  
+#          plot.margin = margin(t = 10, b = 10),
+          strip.background = element_rect(fill = "#f1eef6")) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1,    
+                                   vjust = 0.5)) +
+    theme(strip.text.y.right = element_text(angle = 90))
+}
+
+
+```
+
+## Figure 1
+
+```{r, fig.cap="Figure 1: Survival"}
+plotSurvival(
+  result = survival |> 
+    filterStrata(sex == c("overall"), region == c("overall")),
+  ribbon = TRUE,
+  facet = "year_group",
+  colour = "age_group",
+  cumulativeFailure = FALSE,
+  riskInterval = 30,
+  logLog = FALSE,
+  timeScale = "years"
+) +
+  themeSurvival() +
+  xlim(0, 5) +
+  ylim(0.75, 1) +
+  ggtitle("Kaplan–Meier Survival Curves for Breast Cancer, Stratified by Year of Diagnosis") +
+  xlab("Time (Years)") +
+  ylab("Survival Probability") +
+  scale_colour_manual(
+    values = c(
+      "18 to 39" = "#CD5C5C",
+      "40 to 49" = "#2E8B57",
+      "overall" = "#4682B4"
+    )
+  ) +
+  theme(
+    
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+
+    
+    axis.line = element_line(colour = "black")
+  )
+
+```
+
+```{r, fig.cap="Figure 1: Survival opposite facets"}
+plotSurvival(
+  result = survival |> filterStrata(sex == c("overall"),
+                                    region == c("overall")),
+  ribbon = TRUE,
+  facet = "age_group",
+  colour = "year_group",
+  cumulativeFailure = FALSE,
+  riskInterval = 30,
+  logLog = FALSE,
+  timeScale = "years"
+) +
+  themeSurvival() +
+  xlim(0, 5) +
+  ylim(0.75, 1) +
+  ggtitle("Kaplan–Meier Survival Curves for Breast Cancer, Stratified by Year of Diagnosis") +
+  xlab("Time (Years)") +
+  ylab("Survival Probability") +
+  theme(
+    
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),   
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+    
+    axis.line = element_line(colour = "black"),
+
+    
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+
+
+```
+
+```{r, fig.cap="Figure 1: Survival opposite facets"}
+plotSurvival(
+  result = survival |> filterStrata(
+    sex == c("overall"),
+    region == c("overall"),
+    !(year_group %in% c("2020 to 2024", "overall"))
+  ),
+  ribbon = TRUE,
+  facet = "age_group",
+  colour = "year_group",
+  cumulativeFailure = FALSE,
+  riskInterval = 30,
+  logLog = FALSE,
+  timeScale = "years"
+) +
+  themeSurvival() +
+  xlim(0, 5) +
+  ylim(0.75, 1) +
+  ggtitle("Kaplan–Meier Survival Curves for Breast Cancer, Stratified by Year of Diagnosis") +
+  xlab("Time (Years)") +
+  ylab("Survival Probability") +
+  ggplot2::scale_color_manual(
+    values = c("#accbe1", "#3e885b", "#C1666B", "#014F86")
+  ) +
+  ggplot2::scale_fill_manual(
+    values = c("#accbe1", "#3e885b", "#C1666B", "#014F86")
+  ) +
+  theme(
+    
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+    
+    axis.line = element_line(colour = "black"),
+
+    
+    legend.position = "bottom",
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+
+```
+
+```{r, fig.cap="Figure 1: Survival w/o overall"}
+plotSurvival(
+  result = survival |> filterStrata(
+    sex == c("overall"),
+    region == c("overall"),
+    !(age_group == "overall")
+  ),
+  ribbon = TRUE,
+  facet = "year_group",
+  colour = "age_group",
+  cumulativeFailure = FALSE,
+  riskInterval = 30,
+  logLog = FALSE,
+  timeScale = "years"
+) +
+  themeSurvival() +
+  xlim(0, 5) +
+  ylim(0.75, 1) +
+  ggtitle("Kaplan–Meier Survival Curves for Breast Cancer, Stratified by Year of Diagnosis") +
+  xlab("Time (Years)") +
+  ylab("Survival Probability") +
+  scale_color_manual(
+    values = c(
+      "18 to 39" = "steelblue",
+      "40 to 49" = "palevioletred"
+    )
+  ) +
+  scale_fill_manual(
+    values = c(
+      "18 to 39" = "slategray3",
+      "40 to 49" = "palevioletred2"
+    )
+  ) +
+  theme(
+    
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+    
+    axis.line = element_line(colour = "black"),
+
+    
+    legend.position = "bottom",
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+```
+
+```{r, fig.cap="Figure 1: Survival"}
+plotSurvival(
+  result = survival |> filterStrata(
+    sex == c("overall"),
+    region == c("overall"),
+    year_group == c("overall"),
+    !(age_group == c("overall"))
+  ),
+  ribbon = TRUE,
+  facet = "year_group",
+  colour = "age_group",
+  cumulativeFailure = FALSE,
+  riskInterval = 30,
+  logLog = FALSE,
+  timeScale = "years"
+) +
+  themeSurvival() +
+  xlim(0, 5) +
+  ylim(0.75, 1) +
+  ggtitle("Kaplan–Meier Survival Curve for Breast Cancer") +
+  xlab("Time (Years)") +
+  ylab("Survival Probability") +
+  scale_color_manual(
+    values = c(
+      "18 to 39" = "steelblue",
+      "40 to 49" = "palevioletred"
+    )
+  ) +
+  scale_fill_manual(
+    values = c(
+      "18 to 39" = "slategray3",
+      "40 to 49" = "palevioletred2"
+    )
+  ) +
+  theme(
+  
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+   
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+   
+    axis.line = element_line(colour = "black"),
+
+ 
+    legend.position = "bottom",
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+
+```
+
+```{r, fig.cap="Table 1: Survival"}
+
+tableSurvival(survival |> filterStrata(sex == "overall", region == "overall"), times = c(365, 5 * 365, 3650))
+
+```
+
+::: pagebreak
+:::
+
+```{r, fig.cap="Figure 2: Incidence"}
+ 
+plotIncidence(
+  incPrev |>  
+    filterSettings(
+      denominator_sex == "Both",
+      denominator_age_group == "18 to 49"
+    ) |>
+    filterAdditional(!incidence_start_date == "2024-01-01") |> 
+    filter(!additional_level == "2000-01-01 &&& 2024-12-12"),
+  colour = "denominator_sex",
+  facet = c("region"),
+  ribbon = TRUE,
+  line = TRUE
+) +
+  themeOpioid() +
+  ggtitle("Annualised Crude Incidence Rates for Breast Cancer, Stratified by Region") +
+  xlab("Incidence Start Date") +
+  ylab("Incidence Rate per 100,000 person-years") +
+  scale_color_manual(values = c("steelblue")) +
+  scale_fill_manual(values = c("powderblue")) +
+  scale_x_continuous(breaks = seq(2000, 2025, by = 5)) +
+  theme(
+   
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+  
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+ 
+    axis.line = element_line(colour = "black", linewidth = 0.6),
+
+  
+    legend.position = "bottom",
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+```
+
+```{r, fig.cap="Figure 2: Prevalence"}
+res <- incPrev |>  
+    filterSettings(
+      denominator_sex == "Both",
+      denominator_age_group == "18 to 49",
+      result_type == "prevalence",
+      analysis_type == "point prevalence",
+      analysis_full_contribution == "FALSE",
+      analysis_complete_database_intervals == "FALSE"
+    ) |>
+    filterAdditional(analysis_interval == "years")
+plotPrevalence(
+  res,
+  colour = "outcome_cohort_name",
+  facet = c("region"),
+  ribbon = TRUE,
+  line = TRUE
+) +
+  themeOpioid() +
+  ggtitle("Annualised Crude Prevalence Rates for Breast Cancer, Stratified by Region") +
+  xlab("Time (Years)") +
+  ylab("Prevalence") +
+  #scale_color_manual(values = c("dodgerblue4")) +
+  #scale_fill_manual(values = c("powderblue")) +
+  scale_x_continuous(breaks = seq(2000, 2025, by = 5)) +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 0.01)) +
+  theme(
+  
+    axis.title = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    strip.text = element_text(size = 8),
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.8, "cm"),
+
+   
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    #panel.border = element_blank(),
+
+    axis.line = element_line(colour = "black", linewidth = 0.6),
+
+
+    legend.position = "bottom",
+    strip.background = element_blank(),
+    panel.spacing = unit(1, "lines")
+  )
+
+```
+
+```{r, fig.cap="Figure 3: Cohort Characteristics"}
+tableCharacteristics(cc |> 
+                     filterStrata(year == "overall",
+                                  sex == "overall"))
+
+```
+
+\`\`\`
