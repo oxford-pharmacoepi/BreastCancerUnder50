@@ -1,9 +1,16 @@
 
 load(here::here("data", "studyData.RData"))
 
-# point vs period prevalence
-xp <- data$prevalence |>
+x <- data$prevalence |>
   omopgenerics::tidy() |>
+  dplyr::mutate(
+    prevalence = prevalence * 10000,
+    prevalence_95CI_lower = prevalence_95CI_lower * 10000,
+    prevalence_95CI_upper = prevalence_95CI_upper * 10000,
+  )
+
+# point vs period prevalence
+xp <- x |>
   dplyr::filter(
     outcome_cohort_name == "breast_cancer_end",
     region == "overall",
@@ -25,11 +32,10 @@ p1 <- ggplot2::ggplot(
   ggplot2::geom_point() +
   ggplot2::geom_errorbar() +
   ggplot2::theme(legend.position = "top") +
-  ggplot2::labs(color = "Prevalence type", x = "Year")
+  ggplot2::labs(color = "Prevalence type", x = "Year", y = "Prevalence per 10,000")
 
 # male vs female
-xp <- data$prevalence |>
-  omopgenerics::tidy() |>
+xp <- x |>
   dplyr::filter(
     outcome_cohort_name == "breast_cancer_end",
     region == "overall",
@@ -37,7 +43,10 @@ xp <- data$prevalence |>
     variable_name == "Outcome",
     analysis_type == "point prevalence"
   ) |>
-  dplyr::mutate(year = clock::get_year(as.Date(prevalence_start_date)))
+  dplyr::mutate(
+    year = clock::get_year(as.Date(prevalence_start_date)),
+    sex = factor(denominator_sex, levels = c("Both", "Female", "Male"))
+  )
 p2 <- ggplot2::ggplot(
   data = xp, 
   mapping = ggplot2::aes(
@@ -45,17 +54,21 @@ p2 <- ggplot2::ggplot(
     y = prevalence,
     ymin = prevalence_95CI_lower,
     ymax = prevalence_95CI_upper,
-    colour = denominator_sex
+    colour = sex
   )
 ) +
   ggplot2::geom_point() +
   ggplot2::geom_errorbar() +
   ggplot2::theme(legend.position = "top") +
-  ggplot2::labs(color = "Sex", x = "Year")
+  ggplot2::labs(color = "Sex", x = "Year", y = "Point-prevalence per 10,000") +
+  ggplot2::scale_colour_manual(values = c(
+    "Both" = "#4D4D4D",
+    "Female" = "#F8766D",
+    "Male" = "#619CFF"
+  ))
 
 # age groups
-xp <- data$prevalence |>
-  omopgenerics::tidy() |>
+xp <- x |>
   dplyr::filter(
     outcome_cohort_name == "breast_cancer_end",
     region == "overall",
@@ -63,7 +76,10 @@ xp <- data$prevalence |>
     denominator_sex == "Both",
     analysis_type == "point prevalence"
   ) |>
-  dplyr::mutate(year = clock::get_year(as.Date(prevalence_start_date)))
+  dplyr::mutate(
+    year = clock::get_year(as.Date(prevalence_start_date)),
+    age = factor(denominator_age_group, levels = c("18 to 49", "18 to 39", "40 to 49"))
+  )
 p3 <- ggplot2::ggplot(
   data = xp, 
   mapping = ggplot2::aes(
@@ -71,17 +87,21 @@ p3 <- ggplot2::ggplot(
     y = prevalence,
     ymin = prevalence_95CI_lower,
     ymax = prevalence_95CI_upper,
-    colour = denominator_age_group
+    colour = age
   )
 ) +
   ggplot2::geom_point() +
   ggplot2::geom_errorbar() +
   ggplot2::theme(legend.position = "top") +
-  ggplot2::labs(color = "Age group", x = "Year")
+  ggplot2::labs(color = "Age group", x = "Year", y = "Point-prevalence per 10,000") +
+  ggplot2::scale_colour_manual(values = c(
+    "18 to 49" = "#4D4D4D",
+    "18 to 39" = "#F8766D",
+    "40 to 49" = "#619CFF"
+  ))
 
 # definitions
-xp <- data$prevalence |>
-  omopgenerics::tidy() |>
+xp <- x |>
   dplyr::filter(
     region == "overall",
     denominator_age_group == "18 to 49",
@@ -94,9 +114,10 @@ xp <- data$prevalence |>
     end = dplyr::case_when(
       outcome_cohort_name == "breast_cancer_end" ~ "Forever",
       outcome_cohort_name == "breast_cancer_1y" ~ "1 year",
-      outcome_cohort_name == "breast_cancer_3y" ~ "3 year",
-      outcome_cohort_name == "breast_cancer_5y" ~ "5 year"
-    )
+      outcome_cohort_name == "breast_cancer_3y" ~ "3 years",
+      outcome_cohort_name == "breast_cancer_5y" ~ "5 years"
+    ) |>
+      factor(levels = c("Forever", "1 year", "3 years", "5 years"))
   )
 p4 <- ggplot2::ggplot(
   data = xp, 
@@ -111,7 +132,7 @@ p4 <- ggplot2::ggplot(
   ggplot2::geom_point() +
   ggplot2::geom_errorbar() +
   ggplot2::theme(legend.position = "top") +
-  ggplot2::labs(color = "Prevalence definition", x = "Year")
+  ggplot2::labs(color = "Prevalence definition", x = "Year", y = "Point-prevalence per 10,000")
 
 library(ggplot2)
 library(patchwork)

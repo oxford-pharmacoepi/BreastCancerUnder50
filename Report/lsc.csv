@@ -1,0 +1,69 @@
+covariate,variable_level,pc,pn,smd,table_name
+Breast lump (80767),-30 to -1,36.5%,<0.5%,1.046,condition_occurrence
+Seen in breast clinic (4089031),-30 to -1,21.6%,<0.5%,0.716,observation
+Letter from specialist (4151573),-30 to -1,10.8%,1.2%,0.414,procedure_occurrence
+Diagnostic mammogram and ultrasound panel Breast - left Document (36203740),-30 to -1,7.8%,<0.5%,0.375,measurement
+Referral to breast clinic (4197459),-30 to -1,7.4%,<0.5%,0.361,observation
+Telephone encounter (4089036),-30 to -1,13.6%,4.1%,0.339,procedure_occurrence
+Referral for further care (4084213),-30 to -1,6.6%,0.6%,0.326,observation
+Letter from consultant (4078131),-30 to -1,6.6%,0.7%,0.318,procedure_occurrence
+Seen in general surgery clinic (4088542),-30 to -1,6.1%,<0.5%,0.317,observation
+Introduction procedure (4027403),-30 to -1,6.3%,1.6%,0.242,procedure_occurrence
+Administrative procedure (4033224),-30 to -1,6.8%,1.9%,0.238,observation
+Referral to breast surgeon (4141840),-30 to -1,3.7%,<0.5%,0.226,observation
+Letter received (44789360),-30 to -1,3.3%,0.5%,0.201,procedure_occurrence
+Biopsy of breast (4047494),-30 to -1,3.1%,<0.5%,0.199,procedure_occurrence
+Consultation (4014829),-30 to -1,5.0%,1.5%,0.197,observation
+Patient discharge (4240723),-30 to -1,3.1%,<0.5%,0.196,observation
+Letter encounter (4203434),-30 to -1,3.1%,0.5%,0.193,procedure_occurrence
+Seen in oncology clinic (4083427),-30 to -1,3.0%,<0.5%,0.193,observation
+Incoming mail processing (4155519),-30 to -1,2.8%,<0.5%,0.181,observation
+Letter encounter from patient (4148753),-30 to -1,2.8%,0.6%,0.178,observation
+Fax sent to: (44788214),-30 to -1,2.4%,<0.5%,0.163,observation
+floxacillin (19054936),-30 to -1,2.5%,0.6%,0.162,drug_era
+Stereotactically guided percutaneous core needle biopsy of breast (4022932),-30 to -1,2.4%,<0.5%,0.161,procedure_occurrence
+Fast track referral for suspected breast cancer (44791272),-30 to -1,2.4%,<0.5%,0.160,observation
+Suspected breast cancer (4047558),-30 to -1,2.3%,<0.5%,0.157,observation
+Findings of tobacco or its derivatives use or exposure (903652),-30 to -1,6.9%,3.5%,0.153,observation
+Liaising with patient (46273219),-30 to -1,3.4%,1.1%,0.152,observation
+Patient review (35621985),-30 to -1,5.2%,2.4%,0.148,procedure_occurrence
+Seen in GP's surgery (4089012),-30 to -1,3.3%,1.2%,0.143,observation
+Fast track referral (44812597),-30 to -1,1.9%,<0.5%,0.131,observation
+Telephone triage encounter (4293864),-30 to -1,1.9%,<0.5%,0.130,procedure_occurrence
+diazepam (723013),-30 to -1,3.1%,1.2%,0.130,drug_era
+Communication from: (4088705),-30 to -1,1.9%,<0.5%,0.129,observation
+Choice and booking enhanced services administration (44790074),-30 to -1,1.9%,<0.5%,0.127,observation
+Histologic test (37018329),-30 to -1,1.8%,<0.5%,0.122,measurement
+History of event (1340204),-30 to -1,7.6%,4.8%,0.119,observation
+Examination of breast (4188188),-30 to -1,1.7%,<0.5%,0.118,procedure_occurrence
+"Creatinine measurement, serum (4013964)",-30 to -1,4.5%,2.5%,0.112,measurement
+Potassium measurement (4245152),-30 to -1,4.2%,2.3%,0.109,measurement
+Sodium measurement (4097430),-30 to -1,4.2%,2.3%,0.109,measurement
+Blood urea measurement (4094594),-30 to -1,3.3%,1.6%,0.108,measurement
+Glomerular filtration rate testing (44790183),-30 to -1,3.4%,1.7%,0.107,measurement
+zopiclone (19044883),-30 to -1,2.2%,0.9%,0.105,drug_era
+Measurement of total hemoglobin concentration in plasma specimen (4015178),-30 to -1,4.9%,2.9%,0.103,measurement
+Erythrocyte mean corpuscular volume determination (4016239),-30 to -1,4.8%,2.8%,0.102,measurement
+"Bilirubin, total measurement (4230543)",-30 to -1,3.8%,2.1%,0.102,measurement
+Fax received (44788213),-30 to -1,1.5%,<0.5%,0.101,observation
+tamoxifen (1436678),-30 to -1,1.5%,<0.5%,0.100,drug_era
+Platelet count (4267147),-30 to -1,4.8%,2.9%,0.100,measurement
+Alkaline phosphatase measurement (4230636),-30 to -1,3.8%,2.1%,0.100,measurement
+Breast lump (80767),-365 to -31,24.2%,1.5%,0.722,condition_occurrence
+Townsend deprivation index (715996),-365 to -31,<0.5%,7.3%,-0.359,measurement
+Referral to breast clinic (4197459),-365 to -31,5.7%,<0.5%,0.304,observation
+Seen in breast clinic (4089031),-365 to -31,5.3%,1.0%,0.246,observation
+Referral for further care (4084213),-365 to -31,10.0%,4.6%,0.209,observation
+Referral to breast surgeon (4141840),-365 to -31,2.9%,<0.5%,0.186,observation
+Diagnostic mammogram and ultrasound panel Breast - left Document (36203740),-365 to -31,3.2%,1.1%,0.141,measurement
+Examination of breast (4188188),-365 to -31,1.8%,<0.5%,0.125,procedure_occurrence
+Lloyd George record received (44788815),-365 to -31,0.5%,1.8%,-0.125,observation
+Pain of breast (73819),-365 to -31,2.5%,0.9%,0.123,condition_occurrence
+Seen in general surgery clinic (4088542),-365 to -31,2.6%,1.0%,0.121,observation
+Patient medical record envelope received from family practitioner committee (44788476),-365 to -31,<0.5%,1.7%,-0.119,observation
+tamoxifen (1436678),-365 to -31,1.6%,<0.5%,0.111,drug_era
+Seen in oncology clinic (4083427),-365 to -31,1.6%,<0.5%,0.111,observation
+Breast lump (80767),-inf to -366,12.6%,8.2%,0.143,condition_occurrence
+tamoxifen (1436678),-inf to -366,1.6%,<0.5%,0.111,drug_era
+Family history of breast cancer (4179963),-inf to -366,3.1%,1.4%,0.110,observation
+Seen in breast clinic (4089031),-inf to -366,6.0%,3.7%,0.107,observation
